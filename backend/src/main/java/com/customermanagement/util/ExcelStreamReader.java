@@ -4,7 +4,6 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.eventusermodel.ReadOnlySharedStringsTable;
 import org.apache.poi.xssf.model.StylesTable;
-import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -15,7 +14,6 @@ import org.apache.poi.util.IOUtils;
 
 import java.io.InputStream;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 public class ExcelStreamReader {
@@ -24,7 +22,7 @@ public class ExcelStreamReader {
 
     public static void processInChunks(InputStream inputStream,
                                        Consumer<List<String[]>> chunkProcessor) {
-        IOUtils.setByteArrayMaxOverride(500_000_000); // Allow up to 500MB array allocation
+        IOUtils.setByteArrayMaxOverride(500_000_000);
         try {
             OPCPackage pkg = OPCPackage.open(inputStream);
             ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(pkg);

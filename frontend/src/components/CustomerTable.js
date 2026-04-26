@@ -40,8 +40,8 @@ function CustomerTable({ onEdit, onView, refreshTrigger }) {
         <div>
             <h3 className="mb-3">Customer List</h3>
             <div className="table-responsive">
-                <table className="table table-striped table-hover">
-                    <thead className="table-dark">
+                <table className="table table-hover align-middle">
+                    <thead>
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
@@ -76,17 +76,17 @@ function CustomerTable({ onEdit, onView, refreshTrigger }) {
                                     </td>
                                     <td>
                                         <button 
-                                            className="btn btn-sm btn-info me-1"
+                                            className="btn btn-action me-1"
                                             onClick={() => onView(customer)}>
                                             View
                                         </button>
                                         <button 
-                                            className="btn btn-sm btn-warning me-1"
+                                            className="btn btn-action me-1"
                                             onClick={() => onEdit(customer)}>
                                             Edit
                                         </button>
                                         <button 
-                                            className="btn btn-sm btn-danger"
+                                            className="btn btn-action text-danger"
                                             onClick={() => handleDelete(customer.id)}>
                                             Delete
                                         </button>

@@ -6,11 +6,11 @@ function CustomerView({ customer, onClose }) {
     return (
         <div>
             <h3 className="mb-3">Customer Details</h3>
-            <div className="card">
-                <div className="card-body">
-                    <h5 className="card-title">{customer.name}</h5>
+            <div className="card border-0 shadow-sm">
+                <div className="card-body p-4">
+                    <h5 className="card-title mb-4 pb-2 border-bottom">{customer.name}</h5>
                     
-                    <table className="table table-bordered mt-3">
+                    <table className="table mt-3">
                         <tbody>
                             <tr>
                                 <th width="30%">ID</th>

@@ -69,19 +69,19 @@ function App() {
         <div className="container-fluid py-4">
             <h1 className="text-center mb-4">Customer Management System</h1>
 
-            <div className="d-flex justify-content-center gap-2 mb-4">
+            <div className="d-flex justify-content-center gap-3 mb-5 border-bottom pb-3">
                 <button
                     className={`btn ${view === 'table' ? 'btn-primary' : 'btn-outline-primary'}`}
                     onClick={() => setView('table')}>
                     View All Customers
                 </button>
                 <button
-                    className={`btn ${view === 'create' ? 'btn-success' : 'btn-outline-success'}`}
+                    className={`btn ${view === 'create' ? 'btn-primary' : 'btn-outline-primary'}`}
                     onClick={handleCreate}>
                     Create Customer
                 </button>
                 <button
-                    className={`btn ${view === 'bulk' ? 'btn-warning' : 'btn-outline-warning'}`}
+                    className={`btn ${view === 'bulk' ? 'btn-primary' : 'btn-outline-primary'}`}
                     onClick={() => setView('bulk')}>
                     Bulk Upload
                 </button>

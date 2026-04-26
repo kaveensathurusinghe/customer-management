@@ -265,7 +265,7 @@ function CustomerForm({ customer, onSave, onCancel }) {
                             {formData.mobiles.length > 1 && (
                                 <button
                                     type="button"
-                                    className="btn btn-danger"
+                                    className="btn btn-outline-danger"
                                     onClick={() => removeMobile(index)}>
                                     ✕
                                 </button>
@@ -280,7 +280,7 @@ function CustomerForm({ customer, onSave, onCancel }) {
                 <div className="mb-3">
                     <label className="form-label">Addresses</label>
                     {formData.addresses.map((address, index) => (
-                        <div key={index} className="border p-3 mb-2 rounded">
+                        <div key={index} className="section-bg p-4 mb-3">
                             <div className="row">
                                 <div className="col-md-6 mb-2">
                                     <label className="form-label">Country</label>
@@ -333,7 +333,7 @@ function CustomerForm({ customer, onSave, onCancel }) {
                             {formData.addresses.length > 1 && (
                                 <button
                                     type="button"
-                                    className="btn btn-sm btn-danger"
+                                    className="btn btn-sm btn-outline-danger mt-2"
                                     onClick={() => removeAddress(index)}>
                                     Remove Address
                                 </button>
@@ -346,8 +346,8 @@ function CustomerForm({ customer, onSave, onCancel }) {
                 </div>
 
                 {/* Family Members Section */}
-                <div className="mb-4 p-3 border rounded bg-light">
-                    <h5>Family Members</h5>
+                <div className="section-bg p-4 mb-4">
+                    <h5 className="mb-4">Family Members</h5>
 
                     <div className="row mb-3">
                         <div className="col-md-8">
@@ -372,12 +372,12 @@ function CustomerForm({ customer, onSave, onCancel }) {
                     </div>
 
                     {foundFamily && (
-                        <div className="alert alert-success d-flex justify-content-between align-items-center">
+                        <div className="alert alert-secondary d-flex justify-content-between align-items-center">
                             <span>
                                 <strong>{foundFamily.name}</strong> - NIC: {foundFamily.nicNumber}
                             </span>
                             <button
-                                className="btn btn-sm btn-success"
+                                className="btn btn-sm btn-primary"
                                 type="button"
                                 onClick={handleAddFamily}>
                                 + Add as Family
@@ -407,8 +407,8 @@ function CustomerForm({ customer, onSave, onCancel }) {
                     )}
                 </div>
 
-                <div className="d-flex gap-2">
-                    <button type="submit" className="btn btn-success">
+                <div className="d-flex gap-3 mt-4">
+                    <button type="submit" className="btn btn-primary px-4">
                         {customer ? 'Update Customer' : 'Create Customer'}
                     </button>
                     <button type="button" className="btn btn-secondary" onClick={onCancel}>

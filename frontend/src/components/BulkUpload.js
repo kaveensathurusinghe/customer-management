@@ -41,7 +41,7 @@ function BulkUpload() {
     return (
         <div>
             <h3 className="mb-3">Bulk Customer Upload</h3>
-            <div className="card p-4">
+            <div className="card border-0 shadow-sm p-4">
                 <div className="mb-3">
                     <label className="form-label">Select Excel File</label>
                     <input

@@ -1,24 +1,174 @@
-body {
-    background-color: #f8f9fa;
+:root {
+  --color-primary: #1e293b; /* Slate 800 */
+  --color-primary-hover: #334155; /* Slate 700 */
+  --color-secondary: #64748b; /* Slate 500 */
+  --color-background: #f8fafc; /* Slate 50 */
+  --color-surface: #ffffff;
+  --color-text: #0f172a; /* Slate 900 */
+  --color-text-muted: #64748b; /* Slate 500 */
+  --color-border: #e2e8f0; /* Slate 200 */
+  --color-danger: #ef4444; /* Red 500 */
+  --color-danger-hover: #dc2626; /* Red 600 */
 }
 
-h1 {
-    color: #343a40;
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+/* Container */
+.container-fluid {
+    max-width: 1200px;
+}
+
+/* Card Overrides */
+.card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    box-shadow: none; /* Removed heavy shadow */
+}
+
+/* Button Overrides */
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease-in-out;
+    box-shadow: none !important; /* Force remove bootstrap shadow */
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+}
+
+.btn-outline-primary {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn-danger {
+    background-color: var(--color-danger);
+    border-color: var(--color-danger);
+}
+
+.btn-danger:hover {
+    background-color: var(--color-danger-hover);
+    border-color: var(--color-danger-hover);
+}
+
+.btn-outline-danger {
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+}
+
+.btn-outline-danger:hover {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-border);
+    color: var(--color-text);
+}
+
+/* Subtle action buttons in tables */
+.btn-action {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.btn-action:hover {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    border-color: var(--color-secondary);
+}
+
+/* Form Controls */
+.form-control, .form-select {
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    box-shadow: none !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--color-secondary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(100, 116, 139, 0.2) !important;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* Table Overrides */
+.table {
+    margin-bottom: 0;
+    color: var(--color-text);
+}
+
+.table > :not(caption) > * > * {
+    padding: 1rem 0.75rem;
+    border-bottom-color: var(--color-border);
+}
+
+.table th {
+    font-weight: 600;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-background) !important; /* Override bootstrap dark */
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .table-responsive {
     max-height: 600px;
     overflow-y: auto;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background-color: var(--color-surface);
 }
 
-.btn {
-    min-width: 80px;
-}
-
-.card {
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
+/* Specific component styles */
 .react-datepicker-wrapper {
     display: block;
+}
+
+.section-bg {
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
 }
