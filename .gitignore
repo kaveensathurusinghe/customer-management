@@ -1,0 +1,75 @@
+# ============================================
+# Compiled Files
+# ============================================
+*.class
+*.jar
+*.war
+*.ear
+target/
+
+# ============================================
+# IDE Files (VS Code & IntelliJ)
+# ============================================
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+*.swp
+*.swo
+*~
+
+# ============================================
+# Maven
+# ============================================
+.mvn/wrapper/maven-wrapper.jar
+!/.mvn/wrapper/maven-wrapper.properties
+
+# ============================================
+# OS Generated Files
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ============================================
+# Application Files
+# ============================================
+application-local.properties
+application-dev.properties
+*.log
+
+# ============================================
+# Environment & Config
+# ============================================
+.env
+.env.local
+.env.production
+
+# ============================================
+# Node/React (for when you build the frontend)
+# ============================================
+node_modules/
+dist/
+build/
+package-lock.json
+yarn.lock
+
+# ============================================
+# Temporary Files
+# ============================================
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*~
+logs/
