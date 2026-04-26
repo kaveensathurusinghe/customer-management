@@ -2,6 +2,7 @@ package com.customermanagement.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @Entity
 @Table(name = "address")
+@EqualsAndHashCode(exclude = "customer")
 public class Address {
 
     @Id

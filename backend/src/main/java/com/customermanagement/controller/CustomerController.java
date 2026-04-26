@@ -1,8 +1,8 @@
 package com.customermanagement.controller;
 
-import com.customermanagement.dto.MobileRequest;
+import com.customermanagement.dto.CustomerDTO;
 import com.customermanagement.entity.Address;
-import com.customermanagement.entity.Customer;
+import com.customermanagement.entity.Mobile;
 import com.customermanagement.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,29 +24,29 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer customer) {
-        Customer created = customerService.createCustomer(customer);
+    public ResponseEntity<CustomerDTO> createCustomer(@Valid @RequestBody com.customermanagement.entity.Customer customer) {
+        CustomerDTO created = customerService.createCustomer(customer);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id,
-                                                   @Valid @RequestBody Customer customer) {
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long id,
+                                                      @Valid @RequestBody com.customermanagement.entity.Customer customer) {
         return ResponseEntity.ok(customerService.updateCustomer(id, customer));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id) {
         return ResponseEntity.ok(customerService.getCustomerById(id));
     }
 
     @GetMapping("/nic/{nic}")
-    public ResponseEntity<Customer> getCustomerByNic(@PathVariable String nic) {
+    public ResponseEntity<CustomerDTO> getCustomerByNic(@PathVariable String nic) {
         return ResponseEntity.ok(customerService.searchByNic(nic));
     }
 
     @GetMapping
-    public ResponseEntity<Page<Customer>> getAllCustomers(
+    public ResponseEntity<Page<CustomerDTO>> getAllCustomers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "name") String sortBy,
@@ -61,20 +61,20 @@ public class CustomerController {
     }
 
     @PostMapping("/{customerId}/mobiles")
-    public ResponseEntity<Customer> addMobile(@PathVariable Long customerId,
-                                              @Valid @RequestBody MobileRequest request) {
-        return ResponseEntity.ok(customerService.addMobile(customerId, request.getMobileNumber()));
+    public ResponseEntity<CustomerDTO> addMobile(@PathVariable Long customerId,
+                                                 @RequestBody Mobile mobile) {
+        return ResponseEntity.ok(customerService.addMobile(customerId, mobile.getMobileNumber()));
     }
 
     @PostMapping("/{customerId}/addresses")
-    public ResponseEntity<Customer> addAddress(@PathVariable Long customerId,
-                                               @Valid @RequestBody Address address) {
+    public ResponseEntity<CustomerDTO> addAddress(@PathVariable Long customerId,
+                                                  @Valid @RequestBody Address address) {
         return ResponseEntity.ok(customerService.addAddress(customerId, address));
     }
 
     @PostMapping("/{customerId}/family/{familyMemberId}")
-    public ResponseEntity<Customer> addFamilyMember(@PathVariable Long customerId,
-                                                    @PathVariable Long familyMemberId) {
+    public ResponseEntity<CustomerDTO> addFamilyMember(@PathVariable Long customerId,
+                                                       @PathVariable Long familyMemberId) {
         return ResponseEntity.ok(customerService.addFamilyMember(customerId, familyMemberId));
     }
 

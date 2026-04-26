@@ -2,6 +2,7 @@ package com.customermanagement.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "mobile")
+@EqualsAndHashCode(exclude = "customer")
 public class Mobile {
 
     @Id

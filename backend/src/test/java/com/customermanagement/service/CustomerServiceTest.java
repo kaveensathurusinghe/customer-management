@@ -1,5 +1,6 @@
 package com.customermanagement.service;
 
+import com.customermanagement.dto.CustomerDTO;
 import com.customermanagement.entity.Customer;
 import com.customermanagement.repository.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,10 +29,17 @@ class CustomerServiceTest {
     @Mock
     private CityRepository cityRepository;
 
+    @Mock
+    private CountryService countryService;
+
+    @Mock
+    private CityService cityService;
+
     @InjectMocks
     private CustomerService customerService;
 
     private Customer testCustomer;
+    private CustomerDTO testCustomerDTO;
 
     @BeforeEach
     void setUp() {
@@ -40,6 +48,12 @@ class CustomerServiceTest {
         testCustomer.setName("Test User");
         testCustomer.setDob(new Date());
         testCustomer.setNicNumber("SERVICE001");
+
+        testCustomerDTO = new CustomerDTO();
+        testCustomerDTO.setId(1L);
+        testCustomerDTO.setName("Test User");
+        testCustomerDTO.setDob(new Date());
+        testCustomerDTO.setNicNumber("SERVICE001");
     }
 
     @Test
@@ -47,7 +61,7 @@ class CustomerServiceTest {
         when(customerRepository.existsByNicNumber("SERVICE001")).thenReturn(false);
         when(customerRepository.save(any(Customer.class))).thenReturn(testCustomer);
 
-        Customer created = customerService.createCustomer(testCustomer);
+        CustomerDTO created = customerService.createCustomer(testCustomer);
 
         assertThat(created).isNotNull();
         assertThat(created.getNicNumber()).isEqualTo("SERVICE001");
@@ -67,7 +81,7 @@ class CustomerServiceTest {
     void shouldGetCustomerById() {
         when(customerRepository.findById(1L)).thenReturn(Optional.of(testCustomer));
 
-        Customer found = customerService.getCustomerById(1L);
+        CustomerDTO found = customerService.getCustomerById(1L);
 
         assertThat(found).isNotNull();
         assertThat(found.getName()).isEqualTo("Test User");
@@ -111,7 +125,7 @@ class CustomerServiceTest {
     void shouldSearchCustomerByNic() {
         when(customerRepository.findByNicNumber("SERVICE001")).thenReturn(Optional.of(testCustomer));
 
-        Customer found = customerService.searchByNic("SERVICE001");
+        CustomerDTO found = customerService.searchByNic("SERVICE001");
 
         assertThat(found).isNotNull();
         assertThat(found.getNicNumber()).isEqualTo("SERVICE001");

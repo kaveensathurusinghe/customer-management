@@ -3,6 +3,7 @@ package com.customermanagement.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "customer")
+@EqualsAndHashCode(exclude = {"mobiles", "addresses", "family"})
 public class Customer {
 
     @Id

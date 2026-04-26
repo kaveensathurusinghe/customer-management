@@ -2,6 +2,7 @@ package com.customermanagement.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @Table(name = "city", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"name", "country_id"})
 })
+@EqualsAndHashCode(exclude = "country")
 public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

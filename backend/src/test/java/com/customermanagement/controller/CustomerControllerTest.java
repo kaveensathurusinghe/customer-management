@@ -1,5 +1,6 @@
 package com.customermanagement.controller;
 
+import com.customermanagement.dto.CustomerDTO;
 import com.customermanagement.entity.Customer;
 import com.customermanagement.service.CustomerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,12 +32,19 @@ class CustomerControllerTest {
 
     @Test
     void shouldCreateCustomer() throws Exception {
+        CustomerDTO dto = new CustomerDTO();
+        dto.setId(1L);
+        dto.setName("API Test");
+        dto.setDob(new Date());
+        dto.setNicNumber("API001");
+
+        when(customerService.createCustomer(any(Customer.class))).thenReturn(dto);
+
         Customer customer = new Customer();
-        customer.setId(1L);
         customer.setName("API Test");
         customer.setDob(new Date());
         customer.setNicNumber("API001");
-        when(customerService.createCustomer(any(Customer.class))).thenReturn(customer);
+
         mockMvc.perform(post("/api/customers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer)))
@@ -47,11 +55,13 @@ class CustomerControllerTest {
 
     @Test
     void shouldGetCustomerById() throws Exception {
-        Customer customer = new Customer();
-        customer.setId(1L);
-        customer.setName("API Test");
-        customer.setNicNumber("API001");
-        when(customerService.getCustomerById(1L)).thenReturn(customer);
+        CustomerDTO dto = new CustomerDTO();
+        dto.setId(1L);
+        dto.setName("API Test");
+        dto.setNicNumber("API001");
+
+        when(customerService.getCustomerById(1L)).thenReturn(dto);
+
         mockMvc.perform(get("/api/customers/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("API Test"));
@@ -61,6 +71,7 @@ class CustomerControllerTest {
     void shouldReturn404WhenCustomerNotFound() throws Exception {
         when(customerService.getCustomerById(99L))
                 .thenThrow(new RuntimeException("Customer not found"));
+
         mockMvc.perform(get("/api/customers/99"))
                 .andExpect(status().isBadRequest());
     }
@@ -73,11 +84,13 @@ class CustomerControllerTest {
 
     @Test
     void shouldGetCustomerByNic() throws Exception {
-        Customer customer = new Customer();
-        customer.setId(1L);
-        customer.setName("NIC Search");
-        customer.setNicNumber("API002");
-        when(customerService.searchByNic("API002")).thenReturn(customer);
+        CustomerDTO dto = new CustomerDTO();
+        dto.setId(1L);
+        dto.setName("NIC Search");
+        dto.setNicNumber("API002");
+
+        when(customerService.searchByNic("API002")).thenReturn(dto);
+
         mockMvc.perform(get("/api/customers/nic/API002"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nicNumber").value("API002"));

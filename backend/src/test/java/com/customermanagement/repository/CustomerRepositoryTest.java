@@ -58,22 +58,4 @@ class CustomerRepositoryTest {
         assertThat(customerRepository.existsByNicNumber("20000434343454")).isFalse();
     }
 
-    @Test
-    void findAllNic() {
-        Customer c1 = new Customer();
-        c1.setName("Amal");
-        c1.setDob(new Date());
-        c1.setNicNumber("200232322323V");
-        customerRepository.save(c1);
-
-        Customer c2 = new Customer();
-        c2.setName("Nimal");
-        c2.setDob(new Date());
-        c2.setNicNumber("23232392839289V");
-        customerRepository.save(c2);
-
-        java.util.List<String> nics = customerRepository.findAllNicNumbers();
-
-        assertThat(nics).contains("200232322323V", "23232392839289V");
-    }
 }

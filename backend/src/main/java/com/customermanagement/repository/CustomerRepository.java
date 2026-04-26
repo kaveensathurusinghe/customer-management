@@ -14,6 +14,4 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findByNicNumber(String nicNumber);
     boolean existsByNicNumber(String nicNumber);
 
-    @Query("SELECT c.nicNumber FROM Customer c")
-    List<String> findAllNicNumbers();
 }
