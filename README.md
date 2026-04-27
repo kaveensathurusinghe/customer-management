@@ -1,169 +1,239 @@
 # Customer Management System
 
-A robust, full-stack web application designed for comprehensive customer management. It allows users to manage customer records, including their mobile numbers, multiple addresses, and familial relationships between customers. The system also supports efficient bulk uploading of up to 1,000,000 customer records via Excel.
+A full-stack customer management application with a Spring Boot REST API, a React single-page frontend, and a MariaDB database.
 
-This project serves as a complete technical showcase of integrating a **Java 8 Spring Boot** backend with a **React JS** frontend, communicating with a **MariaDB** database.
+It supports CRUD operations for customers, multiple mobile numbers and addresses, family relationships, and bulk imports from Excel.
 
----
+## Table of Contents
 
-## 📖 Table of Contents
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Ports](#ports)
+- [Quick Start (Docker Compose)](#quick-start-docker-compose)
+- [Local Development](#local-development)
+- [Configuration](#configuration)
+- [Database](#database)
+- [API](#api)
+- [Bulk Upload](#bulk-upload)
+- [Testing](#testing)
 
-- [Architecture Overview](#-architecture-overview)
-- [Key Features](#-key-features)
-- [Database Design](#-database-design)
-- [API Endpoints](#-api-endpoints)
-- [Prerequisites](#-prerequisites)
-- [Setup & Installation](#-setup--installation)
-    - [Option 1: Docker Compose (Recommended)](#option-1-docker-compose-recommended)
-    - [Option 2: Local Development Setup](#option-2-local-development-setup)
-- [Bulk Upload Guidelines](#-bulk-upload-guidelines)
-- [Testing](#-testing)
+## Overview
 
----
+This repository contains:
 
-## 🏛 Architecture Overview
+- `backend/`: Spring Boot 2.7 (Java 8) REST API
+- `frontend/`: React (Create React App) UI
+- `docker-compose.yml`: Local containerized stack (frontend + backend + MariaDB)
 
-The system is split into two primary components:
-1. **Backend (`/backend`)**: A RESTful API built with Java 8 and Spring Boot. It uses Maven for dependency management and Spring Data JPA to interact with MariaDB. It focuses on minimal DB calls and handles massive data imports efficiently (e.g., using memory-optimized batch inserts for Excel parsing).
-2. **Frontend (`/frontend`)**: A React JS Single Page Application (SPA) bootstrapped via Create React App. It utilizes Axios for API calls, Bootstrap for styling, and React Router for navigation.
+## Architecture
 
----
+- Frontend is served by Nginx in Docker and proxies `/api` to the backend container.
+- Backend exposes REST endpoints under `/api/*` and connects to MariaDB using environment variables.
+- Database schema and seed data are initialized via SQL scripts on application startup.
 
-## ✨ Key Features
+## Features
 
-- **Customer CRUD Operations**: Create, Read, Update, and Delete individual customers.
-- **Complex Associations**: 
-  - Store multiple mobile numbers per customer.
-  - Store multiple addresses per customer (linked to a City and Country master dataset).
-  - Link customers as family members (a self-referential many-to-many relationship mapping).
-- **Master Data Management**: Cities and Countries are pre-populated master data, ensuring normalization and consistent location tracking.
-- **Tabular Data View**: Comprehensive UI to list all customers with pagination and filtering support.
-- **High-Performance Bulk Excel Import**: specialized API route to process and insert up to 1,000,000 records from an Excel `.xlsx` file, optimized to prevent timeouts and out-of-memory errors.
+- Customer create, update, view, delete
+- Multiple mobile numbers per customer
+- Multiple addresses per customer, linked to city and country master data
+- Family member relationships between customers
+- Bulk customer import from an Excel file (streamed/chunked processing)
 
----
+## Tech Stack
 
-## 🗄 Database Design
+- Backend: Java 8, Spring Boot 2.7, Spring Web, Spring Data JPA, Bean Validation
+- Database: MariaDB 10.6
+- Bulk import: Apache POI + streamed chunk processing
+- Frontend: React, React Router, Axios, Bootstrap
+- Containerization: Docker, Docker Compose
 
-The relational schema is fully normalized. The design splits the data into core master tables (`country`, `city`), entity tables (`customer`), and 1-to-many / many-to-many relationship tables (`mobile`, `address`, `customer_family`).
+## Prerequisites
 
-- **ER Diagram**:
-  <br>
-  ![ER Diagram](docs/ER-diagram.png)
+- Docker Desktop (recommended for the quickest setup)
+- For local development:
+	- JDK 8
+	- Node.js 18+ and npm
+	- Maven (optional; `backend/` includes `./mvnw`)
 
-### DB Scripts
-All database initialization scripts reside in the `docs/` folder. When using Docker, these might be automatically mounted depending on configuration.
-- **DDL (Schema definition)**: `docs/schema.sql`
-- **DML (Seed data)**: `docs/data.sql`
+## Ports
 
----
+When running with Docker Compose:
 
-## 🔌 API Endpoints
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8080
+- MariaDB: localhost:3307 (mapped to container port 3306)
 
-The core `CustomerController` exposes several RESTful endpoints under `/api/customers`:
+## Quick Start (Docker Compose)
 
-| HTTP Method | Endpoint | Description |
+From the repository root:
+
+```bash
+docker compose up -d --build
+```
+
+If your Docker installation uses the legacy Compose CLI, replace `docker compose` with `docker-compose`.
+
+Useful commands:
+
+```bash
+docker compose logs -f
+docker compose down
+```
+
+Notes:
+
+- The database data is persisted in a Docker volume (`db_data`).
+- The frontend container uses Nginx and proxies `/api` to the backend container.
+
+## Local Development
+
+### 1) Start MariaDB
+
+If you want to use the provided MariaDB container:
+
+```bash
+docker compose up -d db
+```
+
+The DB will be available at `localhost:3307`.
+
+### 2) Run the backend
+
+The backend reads DB connection settings from environment variables (with defaults).
+
+From `backend/`:
+
+```bash
+cd backend
+DB_HOST=localhost \
+DB_PORT=3307 \
+DB_NAME=customer_management \
+DB_USERNAME=springuser \
+DB_PASSWORD=springpass \
+./mvnw spring-boot:run
+```
+
+Backend will start on http://localhost:8080.
+
+### 3) Run the frontend
+
+For local frontend development (React dev server), configure the API base URL to point at the backend:
+
+```bash
+cd frontend
+npm install
+REACT_APP_API_BASE_URL=http://localhost:8080/api npm start
+```
+
+Alternatively, create `frontend/.env`:
+
+```env
+REACT_APP_API_BASE_URL=http://localhost:8080/api
+```
+
+Frontend dev server will start on http://localhost:3000.
+
+## Configuration
+
+### Backend environment variables
+
+The backend supports the following variables (see `backend/src/main/resources/application.properties`):
+
+- `DB_HOST` (default: `localhost`)
+- `DB_PORT` (default: `3306`)
+- `DB_NAME` (default: `customer_management`)
+- `DB_USERNAME` (default: `springuser`)
+- `DB_PASSWORD` (default: `springpass`)
+
+File upload limits (configured in Spring):
+
+- Max file size: `200MB`
+- Max request size: `200MB`
+
+### Frontend environment variables
+
+- `REACT_APP_API_BASE_URL` (default: `/api`)
+
+## Database
+
+The backend initializes the schema and seed data using these scripts on startup:
+
+- `backend/src/main/resources/schema.sql`
+- `backend/src/main/resources/data.sql`
+
+Reference copies are also available under `docs/`:
+
+- `docs/schema.sql`
+- `docs/data.sql`
+
+Entity relationships are documented here:
+
+![ER Diagram](docs/ER-diagram.png)
+
+## API
+
+Base URL: `http://localhost:8080/api`
+
+### Customers
+
+| Method | Endpoint | Description |
 |---|---|---|
-| `GET` | `/api/customers` | Retrieve paginated list of all customers |
-| `GET` | `/api/customers/{id}` | Retrieve specific customer details |
-| `GET` | `/api/customers/nic/{nic}` | Find a customer by their unique NIC |
-| `POST` | `/api/customers` | Create a new customer |
-| `PUT` | `/api/customers/{id}` | Update an existing customer |
-| `DELETE` | `/api/customers/{id}` | Delete a customer (cascades to addresses/mobile/family) |
-| `POST` | `/api/customers/{id}/mobiles` | Add a mobile number to a customer |
-| `POST` | `/api/customers/{id}/addresses`| Add an address to a customer |
-| `POST` | `/api/customers/{id}/family/{fid}`| Link a family member (who must also be a customer) |
-| `POST` | `/api/customers/bulk` | Upload an Excel file for bulk customer creation |
+| `GET` | `/customers` | Paginated list of customers (`page`, `size`, `sortBy`, `direction`) |
+| `GET` | `/customers/{id}` | Get customer by ID |
+| `GET` | `/customers/nic/{nic}` | Get customer by NIC |
+| `POST` | `/customers` | Create customer |
+| `PUT` | `/customers/{id}` | Update customer |
+| `DELETE` | `/customers/{id}` | Delete customer |
+| `POST` | `/customers/{customerId}/mobiles` | Add a mobile number |
+| `POST` | `/customers/{customerId}/addresses` | Add an address |
+| `POST` | `/customers/{customerId}/family/{familyMemberId}` | Link a family member |
+| `POST` | `/customers/bulk` | Bulk import from Excel |
 
----
+### Master data
 
-## ⚙️ Prerequisites
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/countries` | List countries |
+| `GET` | `/countries/{id}` | Get country by ID |
+| `GET` | `/countries/map` | Country name-to-entity map |
+| `GET` | `/cities` | List cities |
+| `GET` | `/cities/{id}` | Get city by ID |
+| `GET` | `/cities/by-country/{countryId}` | Cities for a country |
+| `GET` | `/cities/by-country-name?countryName=...` | Cities for a country name |
 
-To run this application locally, ensure you have the following installed:
-- **Java Development Kit (JDK) 8**
-- **Node.js** (v14+ recommended) and **npm**
-- **Docker** & **Docker Compose** (For containerized deployment)
-- **Maven** (Optional, the wrapper `./mvnw` is provided)
+## Bulk Upload
 
----
+Endpoint: `POST /api/customers/bulk` with multipart form field `file`.
 
-## 🚀 Setup & Installation
+Accepted file type: `.xlsx` (Excel OpenXML).
 
-You can run the application entirely through Docker or set up the stack locally for development.
+Expected columns (in order):
 
-### Option 1: Docker Compose (Recommended)
+1. Name
+2. Date of Birth (format: `yyyy-MM-dd`)
+3. NIC Number
 
-Docker Compose will build the frontend, backend, and spin up the MariaDB instance automatically. 
+Behavior notes:
 
-1. Start the Docker daemon on your machine.
-2. From the root directory, execute:
-   ```bash
-   docker-compose up -d --build
-   ```
-3. Once the build is complete and containers are healthy:
-   - **Frontend UI**: Open `http://localhost:3000`
-   - **Backend API**: Running on `http://localhost:8080`
-   - **MariaDB**: Accessible on port `3307` externally.
+- NIC is unique in the database.
+- The bulk import uses an upsert strategy (existing NICs are updated).
+- The API returns `successCount`, `errorCount`, and up to 100 error messages.
 
-To view logs:
-```bash
-docker-compose logs -f
-```
-To bring down the application:
-```bash
-docker-compose down
-```
+## Testing
 
-### Option 2: Local Development Setup
-
-If you wish to run the app natively to work on the code:
-
-#### 1. Database
-You must have MariaDB running on your system. Alternatively, spin up just the database container:
-```bash
-docker-compose up -d db
-```
-*(The backend expects a database named `customer_management` with user `springuser` and password `springpass`. This is configured in `backend/src/main/resources/application.properties`)*
-
-#### 2. Backend API
-1. Open a terminal and navigate to the backend folder:
-   ```bash
-   cd backend
-   ```
-2. Run the application using the Maven wrapper:
-   ```bash
-   ./mvnw spring-boot:run
-   ```
-
-#### 3. Frontend UI
-1. Open a new terminal and navigate to the frontend folder:
-   ```bash
-   cd frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the React development server:
-   ```bash
-   npm start
-   ```
-
----
-
-## 📊 Bulk Upload Guidelines
-
-To use the `/api/customers/bulk` endpoint or the bulk upload UI:
-- The file must be a standard `.xlsx` (Excel) file.
-- The file is parsed efficiently to maintain low memory overhead, handling up to 1 million rows.
-- Ensure the columns contain all mandatory fields: **Name, Date of Birth, NIC Number**. 
-
----
-
-## 🧪 Testing
-
-The backend includes JUnit tests to verify logic and database interactions. To run the test suite:
+Backend tests:
 
 ```bash
 cd backend
 ./mvnw clean test
+```
+
+Frontend tests:
+
+```bash
+cd frontend
+npm test
 ```
